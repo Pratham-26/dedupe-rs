@@ -1,0 +1,20 @@
+[build-system]
+requires = ["maturin>=1.5,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "dedupe-rs"
+version = "0.1.0"
+description = "Rust implementation of dedupe: fuzzy matching, deduplication and entity resolution"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+keywords = ["deduplication", "entity-resolution", "fuzzy-matching", "record-linkage"]
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Scientific/Engineering :: Information Analysis",
+]
+
+[tool.maturin]
+python-source = "python"
+module-name = "dedupe_rs._native"

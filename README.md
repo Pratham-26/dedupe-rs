@@ -17,6 +17,7 @@ implementations are benchmarked head to head for time and memory.
 | `dedupe-rs/tests` | Unit tests, cross-language parity tests, and API smoke tests. |
 | `dedupe-rs/tests/golden` | Golden vectors generated from the Python reference. |
 | `dedupe-rs/PROFILING.md` | Time and memory benchmark against the Python implementation. |
+| `python/` | Python bindings (PyO3 + maturin), published as the `dedupe-rs` wheel. |
 | `parity/` | Python harness that generates the golden vectors and runs the benchmarks. |
 
 ## Quick start
@@ -28,6 +29,45 @@ cargo test --release  # same, faster
 
 # End-to-end benchmark (needs the golden dataset, see below)
 cargo run --release --example profile 8
+```
+
+## Python package
+
+The port is also importable from Python via PyO3 bindings that keep the same
+workflow as the original library:
+
+```bash
+pip install dedupe-rs          # or build locally with maturin
+```
+
+```python
+import dedupe_rs
+from dedupe_rs import variables as V
+
+deduper = dedupe_rs.Dedupe([V.String("name"), V.String("age")])
+deduper.prepare_training(data)
+while True:
+    try:
+        pair = deduper.uncertain_pairs()
+    except IndexError:
+        break
+    deduper.mark_pairs({"match": [pair], "distinct": []})
+deduper.train()
+clusters = deduper.partition(data, threshold=0.5)
+```
+
+`RecordLink`, `Gazetteer`, `StaticDedupe`/`StaticRecordLink`/`StaticGazetteer`,
+`canonicalize`, `training_data_link`/`training_data_dedupe`,
+`write_training`/`read_training` and `console_label` are all exposed. See
+[`python/README.md`](python/README.md) for details and compatibility notes
+(notably: settings are JSON rather than pickles).
+
+Build and test the bindings with:
+
+```bash
+cd python
+maturin develop --release      # or: maturin build --release -o dist
+python -m pytest tests -q
 ```
 
 ## Parity

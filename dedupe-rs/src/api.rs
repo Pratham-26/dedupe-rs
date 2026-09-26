@@ -531,6 +531,18 @@ impl Gazetteer {
         self
     }
 
+    /// Build a gazetteer around an already-configured matcher (settings files).
+    pub fn from_matching(matching: Matching) -> Self {
+        Self {
+            matching,
+            training_pairs: TrainingData::default(),
+            active_learner: None,
+            indexed_data: Data::new(),
+            indexed_blocks: FxHashMap::default(),
+            rng_seed: 0,
+        }
+    }
+
     pub fn prepare_training(&mut self, data_1: &Data, data_2: &Data) -> Result<(), String> {
         if data_1.is_empty() || data_2.is_empty() {
             return Err("Dictionary of records is empty.".to_string());

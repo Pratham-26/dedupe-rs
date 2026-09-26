@@ -9,3 +9,9 @@
 __pycache__/
 *.py[cod]
 .pytest_cache/
+
+# Python package build artifacts
+/python/target/
+/python/dist/
+*.pyd
+*.so
