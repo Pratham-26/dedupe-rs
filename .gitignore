@@ -1,0 +1,11 @@
+# Upstream Python reference implementation (cloned separately, not part of this repo)
+/dedupe/
+
+# Rust build artifacts
+/target/
+/dedupe-rs/target/
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
